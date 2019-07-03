@@ -7,25 +7,19 @@ final class GStrobeTests: XCTestCase {
         let a = GStrobe(customization: protocolName)
         let b = GStrobe(customization: protocolName)
         
-        func check(line: UInt = #line) {
-            for i in 0..<12 {
-                XCTAssertEqual(a.gimli.words[i], b.gimli.words[i], line: line)
-            }
-        }
-        
         // Key
         let shared = Data(repeating: 0x1F, count: 32)
         a.key(shared)
         b.key(shared)
-        check()
-        
+        XCTAssertEqual(a.gimli, b.gimli)
+
         // PRF
-        var ra = Data(capacity: 32)
-        var rb = Data(capacity: 32)
+        var ra = Data()
+        var rb = Data()
         a.prf(into: &ra, count: 32)
         b.prf(into: &rb, count: 32)
         XCTAssertEqual(ra, rb)
-        check()
+        XCTAssertEqual(a.gimli, b.gimli)
 
         // Send/receive
         let message = "Some Bytes".data(using: .ascii)!
@@ -34,35 +28,33 @@ final class GStrobeTests: XCTestCase {
         a.send(message, into: &ciphertext)
         b.receive(ciphertext, into: &decrypted)
         XCTAssertEqual(message, decrypted)
-        check()
-        
+        XCTAssertEqual(a.gimli, b.gimli)
+
         // AD
         a.additionalData(message)
         b.additionalData(message)
-        check()
-        
+        XCTAssertEqual(a.gimli, b.gimli)
+
         // metaAD
         a.metaAdditionalData(message)
         b.metaAdditionalData(message)
-        check()
+        XCTAssertEqual(a.gimli, b.gimli)
 
         // MAC
-        var mac = Data(capacity: 16)
+        var mac = Data()
         a.sendMAC(&mac)
         XCTAssert(b.receiveMAC(mac))
-        check()
-        
+        XCTAssertEqual(a.gimli, b.gimli)
+
         // Ratchet
         a.ratchet()
         b.ratchet()
-        check()
-        
+        XCTAssertEqual(a.gimli, b.gimli)
+
         // Clone
-        let c = GStrobe(cloning: a)
-        let d = GStrobe(cloning: b)
-        for i in 0..<12 {
-            XCTAssertEqual(c.gimli.words[i], d.gimli.words[i])
-        }
+        let c = GStrobe(from: a)
+        let d = GStrobe(from: b)
+        XCTAssertEqual(c.gimli, d.gimli)
     }
 
     static var allTests = [

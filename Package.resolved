@@ -5,9 +5,9 @@
         "package": "Gimli",
         "repositoryURL": "https://github.com/nixberg/Gimli",
         "state": {
-          "branch": null,
-          "revision": "2d972461e466655489a5dfd13810eb662f9db2d0",
-          "version": "0.0.0"
+          "branch": "master",
+          "revision": "dafb70fcf0253274a5b2f8fa7da30abb1aca9996",
+          "version": null
         }
       }
     ]

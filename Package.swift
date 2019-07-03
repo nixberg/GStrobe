@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 
 import PackageDescription
 
@@ -9,8 +9,8 @@ let package = Package(
             name: "GStrobe",
             targets: ["GStrobe"]),
     ],
-    dependencies: [		
-        .package(url: "https://github.com/nixberg/Gimli", from: "0.0.0"),
+    dependencies: [
+        .package(url: "https://github.com/nixberg/Gimli", .branch("master")),
     ],
     targets: [
         .target(
